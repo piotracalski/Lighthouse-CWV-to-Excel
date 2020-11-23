@@ -1,4 +1,6 @@
 # Lighthouse TTI -> Excel
+This is a script that automatically transfers Lighthouse report data to Excel. At this moment below data is transfered:
+Report name, Time of execution, Time to interactive
 
 ## Prerequisites
 ### Python 3.x
