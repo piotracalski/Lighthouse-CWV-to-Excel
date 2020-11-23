@@ -16,3 +16,6 @@ Note: Lighthouse naming convention is relevant to version 6.4.1
 ## Execute script
 From the root folder:
 `python main.py`
+
+## Results
+Results are stored in *tti_times.xls* file in the root folder.
