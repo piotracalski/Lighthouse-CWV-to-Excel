@@ -10,7 +10,7 @@ At the moment of writing this script my version of Python was: 3.7.4
 `pip install xlwt`
 
 ### Lighthouse reports
-All Lightouse reports should be in *reports* folder next to *main.py* script file. If you want to scan reports from different location you need to change *directory* parameter in line 6 of *main.py* file.
+All Lightouse reports should be in *reports* folder next to *main.py* script file. If you want to scan reports from different location you need to edit *reports_directory* in line 6 of *main.py* file.
 Note: This script is relevant to Lighthouse version 6.4.1. Script requires reports to be **JSON files**.
 
 ## Execute script
