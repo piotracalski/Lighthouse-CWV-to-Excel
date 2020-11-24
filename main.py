@@ -1,51 +1,69 @@
 import os
-import re
+import json
 import xlwt
+import time
 
-def get_file_source(path):
-  with open(path, 'r') as file:
-    return file.read()
+reports_directory = 'reports'
 
-def get_tti_from_source(source):
-  pattern = 'displayValue":"\d+.\d'
-  all_findings = re.findall(pattern, source)
-  tti = all_findings[9].replace('displayValue":"', '')
-  return float(tti)
+def read_report(path):
+  with open(path) as f:
+    data = json.load(f)
+    return data
 
-def get_report_time(report_name):
-  time = (report_name
-  .split('_')[2]
-  .split('.')[0]
-  .replace('-', ':'))
-  return time
+def get_tti_from_report(report):
+  value = report['audits']['interactive']['numericValue']
+  return round(float(value))
 
-def save_ttis_to_excel(ttis):
+def get_fetch_time_from_report(report):
+  value = report['fetchTime'][11:-1]
+  if time.timezone != 0:
+    value = adjust_time(value)
+  return value
+
+def get_url_from_report(report):
+  value = report['requestedUrl']
+  return value
+
+def adjust_time(time_value):
+  hour = time_value[:2]
+  if hour == '23':
+    hour = '00'
+  else:
+    adjustment = time.timezone / 3600
+    hour = f'{int(int(hour) - adjustment)}'
+  return f'{hour}{time_value[2:]}'  
+
+def save_samples_to_excel(samples):
   book = xlwt.Workbook()
   sh = book.add_sheet('tti_times')
-  sh.write(0, 0, "Report")
-  sh.write(0, 1, "Time of Execution")
-  sh.write(0, 2, "Time to Interactive")
+  sh.write_merge(0, 1, 0, 0, 'URL')
+  sh.write(0, 1, 'Fetch time')
+  sh.write(0, 2, 'Time to interactive')
+
+  sh.write(1, 1, f'[UTC{"%+d" % int(-float(time.timezone / 3600))}]')
+  sh.write(1, 2, '[ms]')
 
   i=2
 
-  for (filename, time_of_execution, tti) in ttis:
-      sh.write(i, 0, filename)
-      sh.write(i, 1, time_of_execution)
+  for (url, fetch_time, tti) in samples:
+      sh.write(i, 0, url)
+      sh.write(i, 1, fetch_time)
       sh.write(i, 2, tti)
       i = i+1
 
-  book.save("tti_times.xls")
+  book.save('tti_times.xls')
 
 def get_results(directory):
-  ttis = []
+  samples = []
 
   for filename in os.listdir(directory):
-    source = get_file_source(f'{directory}/{filename}')
-    tti = get_tti_from_source(source)
-    time_of_execution = get_report_time(filename)
-    ttis.append((filename, time_of_execution, tti))
+    report = read_report(f'{directory}/{filename}')
+    tti = get_tti_from_report(report)
+    fetch_time = get_fetch_time_from_report(report)
+    requested_url = get_url_from_report(report)
+    samples.append((requested_url, fetch_time, tti))
 
-  save_ttis_to_excel(ttis)
+  save_samples_to_excel(samples)
 
 if __name__ == "__main__":
-  get_results('reports')
+  get_results(reports_directory)
