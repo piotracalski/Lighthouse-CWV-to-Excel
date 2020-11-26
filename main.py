@@ -11,8 +11,11 @@ def read_report(path):
     return data
 
 def get_tti_from_report(report):
-  value = report['audits']['interactive']['numericValue']
-  return round(float(value))
+  try:
+    value = round(float(report['audits']['interactive']['numericValue']))
+  except:
+    value = 'No result'
+  return value
 
 def get_fetch_time_from_report(report):
   value = report['fetchTime'][11:-1]
