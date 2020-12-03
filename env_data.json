@@ -1,0 +1,21 @@
+
+{
+  "metrics": [
+    {
+      "label": "Largest Contentful Paint",
+      "report_key": "largestContentfulPaint",
+      "unit": "[ms]"
+    },
+    {
+      "label": "Total Blocking Time",
+      "report_key": "totalBlockingTime",
+      "unit": "[ms]"
+    },
+    {
+      "label": "Cumulative Layout Shift",
+      "report_key": "cumulativeLayoutShift",
+      "unit": "[s]"
+    }
+  ],
+  "reports_directory": "reports"
+}
