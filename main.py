@@ -15,7 +15,7 @@ def get_metrics_from_report(report):
   for metric in env_data['metrics']:
     try:
       value = report['audits']['metrics']['details']['items'][0][metric['report_key']]
-      value = round(value, 1) if metric['unit'] == '[s]' else value
+      value = round(value, 1) if metric['unit'] == '[-]' else value
     except:
       value = 'No result'
     finally:

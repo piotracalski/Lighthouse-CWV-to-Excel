@@ -14,7 +14,7 @@
     {
       "label": "Cumulative Layout Shift",
       "report_key": "cumulativeLayoutShift",
-      "unit": "[s]"
+      "unit": "[-]"
     }
   ],
   "reports_directory": "reports"
